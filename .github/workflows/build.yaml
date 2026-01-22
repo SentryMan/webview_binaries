@@ -46,6 +46,10 @@ jobs:
         # Install aarch64 cross-compilation toolchain
         if [[ "${{ matrix.arch }}" == "aarch64" ]]; then
           sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+          sudo dpkg --add-architecture arm64
+          sudo apt-get update
+          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
+            libgtk-4-dev:arm64 libwebkitgtk-6.0-dev:arm64
         fi
     
     - name: Create build directories
@@ -53,36 +57,6 @@ jobs:
         cd webview
         mkdir -p build-${{ matrix.target }}/core/amalgamation
         chmod -R 755 build-${{ matrix.target }}
-    
-    - name: Create aarch64 toolchain file
-      if: matrix.arch == 'aarch64'
-      run: |
-        cat > aarch64-toolchain.cmake << 'EOF'
-        set(CMAKE_SYSTEM_NAME Linux)
-        set(CMAKE_SYSTEM_PROCESSOR aarch64)
-        
-        set(CMAKE_C_COMPILER aarch64-linux-gnu-gcc)
-        set(CMAKE_CXX_COMPILER aarch64-linux-gnu-g++)
-        
-        set(CMAKE_FIND_ROOT_PATH /usr/aarch64-linux-gnu)
-        set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-        set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-        set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-        
-        # Clear any default flags that might contain x86-specific options
-        set(CMAKE_C_FLAGS_INIT "")
-        set(CMAKE_CXX_FLAGS_INIT "")
-        set(CMAKE_C_FLAGS "")
-        set(CMAKE_CXX_FLAGS "")
-        EOF
-    
-    - name: Patch CMakeLists for aarch64
-      if: matrix.arch == 'aarch64'
-      run: |
-        cd webview
-        # Remove x86-specific compiler flags from CMakeLists files
-        find . -name "CMakeLists.txt" -type f -exec sed -i 's/-msse//g; s/-msse2//g; s/-mfpmath=sse//g; s/-march=native//g; s/-mtune=native//g' {} +
-        find . -name "*.cmake" -type f -exec sed -i 's/-msse//g; s/-msse2//g; s/-mfpmath=sse//g; s/-march=native//g; s/-mtune=native//g' {} +
     
     - name: Build
       run: |
@@ -92,10 +66,15 @@ jobs:
         
         # Set up cross-compilation for aarch64
         if [[ "${{ matrix.arch }}" == "aarch64" ]]; then
+          export CC=aarch64-linux-gnu-gcc
+          export CXX=aarch64-linux-gnu-g++
           export PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig
           
           cmake .. -DCMAKE_BUILD_TYPE=Release \
-                   -DCMAKE_TOOLCHAIN_FILE=../../aarch64-toolchain.cmake \
+                   -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc \
+                   -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ \
+                   -DCMAKE_SYSTEM_NAME=Linux \
+                   -DCMAKE_SYSTEM_PROCESSOR=aarch64 \
                    -DWEBVIEW_BUILD_DOCS=OFF \
                    -DWEBVIEW_ENABLE_CLANG_FORMAT=OFF \
                    -DWEBVIEW_ENABLE_CLANG_TIDY=OFF
