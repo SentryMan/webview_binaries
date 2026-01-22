@@ -474,6 +474,7 @@ jobs:
         # Windows
         copy_lib "windows-x86" "avaje-webview-windows-x86/src/main/resources/io/avaje/webview/nativelib/windows_nt/x86" "dll"
         copy_lib "windows-x86_64" "avaje-webview-windows-x86_64/src/main/resources/io/avaje/webview/nativelib/windows_nt/x86_64" "dll"
+        rm -rf artifacts
     
     - name: Check for changes
       id: check_changes
