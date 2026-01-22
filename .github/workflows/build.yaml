@@ -63,13 +63,13 @@ jobs:
     - name: Copy artifacts to resource directory
       run: |
         mkdir -p ${{ matrix.dest_path }}
-        find webview/build-${{ matrix.target }} -type f -name "*.so" -exec cp {} ${{ matrix.dest_path }} \;
+        find webview/build-${{ matrix.target }} -type f -name "webview.so" -exec cp {} ${{ matrix.dest_path }} \;
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: webview-${{ matrix.target }}
-        path: ${{ matrix.dest_path }}*
+        path: ${{ matrix.dest_path }}webview.so
         if-no-files-found: warn
 
   build-linux-musl:
@@ -139,13 +139,13 @@ jobs:
     - name: Copy artifacts to resource directory
       run: |
         mkdir -p ${{ matrix.dest_path }}
-        find webview/build-${{ matrix.target }} -type f -name "*.so" -exec cp {} ${{ matrix.dest_path }} \;
+        find webview/build-${{ matrix.target }} -type f -name "webview.so" -exec cp {} ${{ matrix.dest_path }} \;
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: webview-${{ matrix.target }}
-        path: ${{ matrix.dest_path }}*
+        path: ${{ matrix.dest_path }}webview.so
         if-no-files-found: warn
 
   build-linux-arm-musl:
@@ -215,13 +215,13 @@ jobs:
     - name: Copy artifacts to resource directory
       run: |
         mkdir -p ${{ matrix.dest_path }}
-        find webview/build-${{ matrix.target }} -type f -name "*.so" -exec cp {} ${{ matrix.dest_path }} \;
+        find webview/build-${{ matrix.target }} -type f -name "webview.so" -exec cp {} ${{ matrix.dest_path }} \;
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: webview-${{ matrix.target }}
-        path: ${{ matrix.dest_path }}*
+        path: ${{ matrix.dest_path }}webview.so
         if-no-files-found: warn
 
   build-linux-arm:
@@ -350,13 +350,13 @@ jobs:
     - name: Copy artifacts to resource directory
       run: |
         mkdir -p ${{ matrix.dest_path }}
-        find webview/build-${{ matrix.target }} -type f -name "*.dylib" -exec cp {} ${{ matrix.dest_path }} \;
+        find webview/build-${{ matrix.target }} -type f -name "webview.dylib" -exec cp {} ${{ matrix.dest_path }} \;
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: webview-${{ matrix.target }}
-        path: ${{ matrix.dest_path }}*
+        path: ${{ matrix.dest_path }}webview.dylib
         if-no-files-found: warn
 
   build-windows:
@@ -397,13 +397,13 @@ jobs:
       shell: bash
       run: |
         mkdir -p ${{ matrix.dest_path }}
-        find webview/build-${{ matrix.target }} -type f -name "*.dll" -exec cp {} ${{ matrix.dest_path }} \;
+        find webview/build-${{ matrix.target }} -type f -name "webview.dll" -exec cp {} ${{ matrix.dest_path }} \;
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: webview-${{ matrix.target }}
-        path: ${{ matrix.dest_path }}*
+        path: ${{ matrix.dest_path }}webview.dll
         if-no-files-found: warn
 
   create-pr:
