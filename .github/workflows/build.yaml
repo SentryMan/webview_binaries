@@ -132,7 +132,8 @@ jobs:
           cmake .. -DCMAKE_BUILD_TYPE=Release \
                    -DWEBVIEW_BUILD_DOCS=OFF \
                    -DWEBVIEW_ENABLE_CLANG_FORMAT=OFF \
-                   -DWEBVIEW_ENABLE_CLANG_TIDY=OFF
+                   -DWEBVIEW_ENABLE_CLANG_TIDY=OFF \
+                   -DClangFormat_DIR=/usr/bin
         fi
         
         cmake --build . --config Release
