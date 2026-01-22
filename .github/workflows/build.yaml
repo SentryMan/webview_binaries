@@ -389,7 +389,10 @@ jobs:
   deploy-libraries:
     needs: [build-linux, build-linux-musl, build-linux-arm-musl, build-linux-arm, build-macos, build-windows]
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write
+      pull-requests: write
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
