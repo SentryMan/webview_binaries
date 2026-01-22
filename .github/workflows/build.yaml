@@ -442,17 +442,16 @@ jobs:
           # Create destination directory
           mkdir -p "$dest_path"
           
-          # Find the library file with exact name "webview" (excluding extension)
-          lib_file=$(find "artifacts/webview-$artifact_name" -type f -name "webview.$extension" | head -n 1)
+          # Find the library file - must be exactly "webview" or "libwebview" (not counting extension)
+          lib_file=$(find "artifacts/webview-$artifact_name" -type f \( -name "webview.$extension" -o -name "libwebview.$extension" \) | head -n 1)
           
           if [ -n "$lib_file" ]; then
             echo "Found: $lib_file"
-            cp "$lib_file" "$dest_path/webview.$extension"
-            echo "Copied to: $dest_path/webview.$extension"
+            cp "$lib_file" "$dest_path/"
+            echo "Copied to: $dest_path/"
           else
-            echo "WARNING: No webview.$extension found for $artifact_name"
-            echo "Available files:"
-            find "artifacts/webview-$artifact_name" -type f -name "*.$extension" || echo "  None"
+            echo "WARNING: No library found for $artifact_name with extension $extension"
+            echo "Searched for: webview.$extension or libwebview.$extension"
           fi
         }
         
