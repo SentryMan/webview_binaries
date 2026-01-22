@@ -109,7 +109,7 @@ jobs:
               musl-dev \
               linux-headers \
               gtk+3.0-dev \
-              webkit2gtk-dev \
+              webkit2gtk-4.1-dev \
               pkgconfig
             
             # Create build directory
@@ -181,7 +181,7 @@ jobs:
               musl-dev \
               linux-headers \
               gtk+3.0-dev \
-              webkit2gtk-dev \
+              webkit2gtk-4.1-dev \
               pkgconfig
             
             # Create build directory
