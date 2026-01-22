@@ -76,6 +76,14 @@ jobs:
         set(CMAKE_CXX_FLAGS "")
         EOF
     
+    - name: Patch CMakeLists for aarch64
+      if: matrix.arch == 'aarch64'
+      run: |
+        cd webview
+        # Remove x86-specific compiler flags from CMakeLists files
+        find . -name "CMakeLists.txt" -type f -exec sed -i 's/-msse//g; s/-msse2//g; s/-mfpmath=sse//g; s/-march=native//g; s/-mtune=native//g' {} +
+        find . -name "*.cmake" -type f -exec sed -i 's/-msse//g; s/-msse2//g; s/-mfpmath=sse//g; s/-march=native//g; s/-mtune=native//g' {} +
+    
     - name: Build
       run: |
         cd webview
