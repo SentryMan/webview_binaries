@@ -478,7 +478,11 @@ jobs:
     - name: Check for changes
       id: check_changes
       run: |
-        git add avaje-webview-*/src/main/resources/
+        # Only add the specific webview library files (so, dll, dylib)
+        git add avaje-webview-*/src/main/resources/io/avaje/webview/nativelib/**/*.so
+        git add avaje-webview-*/src/main/resources/io/avaje/webview/nativelib/**/*.dll
+        git add avaje-webview-*/src/main/resources/io/avaje/webview/nativelib/**/*.dylib
+        
         if git diff --staged --quiet; then
           echo "has_changes=false" >> $GITHUB_OUTPUT
           echo "No changes detected"
