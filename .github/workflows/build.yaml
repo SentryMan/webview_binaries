@@ -75,10 +75,10 @@ jobs:
         include:
           - target: linux-x86-musl
             arch: x86
-            alpine_arch: x86
+            alpine_arch: 386
           - target: linux-x86_64-musl
             arch: x86_64
-            alpine_arch: x86_64
+            alpine_arch: amd64
     
     steps:
     - uses: actions/checkout@v4
@@ -147,10 +147,10 @@ jobs:
         include:
           - target: linux-aarch64-musl
             arch: aarch64
-            alpine_arch: aarch64
+            alpine_arch: arm64
           - target: linux-arm-musl
             arch: armv7
-            alpine_arch: armv7
+            alpine_arch: arm/v7
     
     steps:
     - uses: actions/checkout@v4
