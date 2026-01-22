@@ -121,7 +121,7 @@ jobs:
         cd dist && tar czf webview-${{ matrix.platform }}.tar.gz *
     
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: webview-${{ matrix.platform }}
         path: dist/*.tar.gz
@@ -165,7 +165,7 @@ jobs:
         cd dist && tar czf webview-${{ matrix.platform }}.tar.gz *
     
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: webview-${{ matrix.platform }}
         path: dist/*.tar.gz
@@ -207,7 +207,7 @@ jobs:
         cd dist && 7z a webview-${{ matrix.platform }}.zip *
     
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: webview-${{ matrix.platform }}
         path: dist/*.zip
