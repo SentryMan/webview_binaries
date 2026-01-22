@@ -30,7 +30,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake build-essential libgtk-4-dev libwebkitgtk-6.0-dev clang-format
+        sudo apt-get install -y cmake build-essential libgtk-4-dev libwebkitgtk-6.0-dev
         
         # Install 32-bit development libraries for x86 targets
         if [[ "${{ matrix.arch }}" == "i686" ]]; then
@@ -90,7 +90,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake build-essential libgtk-4-dev libwebkitgtk-6.0-dev clang-format
+        sudo apt-get install -y cmake build-essential libgtk-4-dev libwebkitgtk-6.0-dev
         
         # Install armhf cross-compilation toolchain for 32-bit ARM
         if [[ "${{ matrix.arch }}" == "armv7l" ]]; then
@@ -99,7 +99,7 @@ jobs:
           # Add armhf architecture and install ARM32 GTK/WebKit libraries
           sudo dpkg --add-architecture armhf
           sudo apt-get update
-          sudo apt-get install -y libgtk-4-dev:armhf libwebkitgtk-6.0-dev:armhf
+          sudo apt-get install -y libgtk-4-dev:armhf libwebkitgtk-6.0-dev:armhf clang-format
         fi
     
     - name: Create build directories
