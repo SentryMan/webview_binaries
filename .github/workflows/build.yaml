@@ -17,10 +17,12 @@ jobs:
             arch: i686
             toolchain: gcc
             libc: gnu
+            dest_path: avaje-webview-linux-x86-gnu/src/main/resources/io/avaje/webview/nativelib/linux/x86/gnu/
           - target: linux-x86_64-gnu
             arch: x86_64
             toolchain: gcc
             libc: gnu
+            dest_path: avaje-webview-linux-x86_64-gnu/src/main/resources/io/avaje/webview/nativelib/linux/x86_64/gnu/
     
     steps:
     - uses: actions/checkout@v4
@@ -58,14 +60,16 @@ jobs:
         
         cmake --build . --config Release
     
+    - name: Copy artifacts to resource directory
+      run: |
+        mkdir -p ${{ matrix.dest_path }}
+        find webview/build-${{ matrix.target }} -type f -name "webview.so" -exec cp {} ${{ matrix.dest_path }} \;
+    
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: webview-${{ matrix.target }}
-        path: |
-          webview/build-${{ matrix.target }}/**/*.so
-          webview/build-${{ matrix.target }}/**/*.a
-          webview/build-${{ matrix.target }}/**/webview
+        path: ${{ matrix.dest_path }}webview.so
         if-no-files-found: warn
 
   build-linux-musl:
@@ -76,9 +80,11 @@ jobs:
           - target: linux-x86-musl
             arch: x86
             alpine_arch: 386
+            dest_path: avaje-webview-linux-x86-musl/src/main/resources/io/avaje/webview/nativelib/linux/x86/musl/
           - target: linux-x86_64-musl
             arch: x86_64
             alpine_arch: amd64
+            dest_path: avaje-webview-linux-x86_64-musl/src/main/resources/io/avaje/webview/nativelib/linux/x86_64/musl/
     
     steps:
     - uses: actions/checkout@v4
@@ -130,14 +136,16 @@ jobs:
             find . -name "*.a" -o -name "*.so" -o -name "webview" -type f
           '
     
+    - name: Copy artifacts to resource directory
+      run: |
+        mkdir -p ${{ matrix.dest_path }}
+        find webview/build-${{ matrix.target }} -type f -name "webview.so" -exec cp {} ${{ matrix.dest_path }} \;
+    
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: webview-${{ matrix.target }}
-        path: |
-          webview/build-${{ matrix.target }}/**/*.so
-          webview/build-${{ matrix.target }}/**/*.a
-          webview/build-${{ matrix.target }}/**/webview
+        path: ${{ matrix.dest_path }}webview.so
         if-no-files-found: warn
 
   build-linux-arm-musl:
@@ -148,9 +156,11 @@ jobs:
           - target: linux-aarch64-musl
             arch: aarch64
             alpine_arch: arm64
+            dest_path: avaje-webview-linux-aarch64-musl/src/main/resources/io/avaje/webview/nativelib/linux/aarch64/musl/
           - target: linux-arm-musl
             arch: armv7
             alpine_arch: arm/v7
+            dest_path: avaje-webview-linux-arm-musl/src/main/resources/io/avaje/webview/nativelib/linux/arm/musl/
     
     steps:
     - uses: actions/checkout@v4
@@ -202,14 +212,16 @@ jobs:
             find . -name "*.a" -o -name "*.so" -o -name "webview" -type f
           '
     
+    - name: Copy artifacts to resource directory
+      run: |
+        mkdir -p ${{ matrix.dest_path }}
+        find webview/build-${{ matrix.target }} -type f -name "webview.so" -exec cp {} ${{ matrix.dest_path }} \;
+    
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: webview-${{ matrix.target }}
-        path: |
-          webview/build-${{ matrix.target }}/**/*.so
-          webview/build-${{ matrix.target }}/**/*.a
-          webview/build-${{ matrix.target }}/**/webview
+        path: ${{ matrix.dest_path }}webview.so
         if-no-files-found: warn
 
   build-linux-arm:
@@ -221,10 +233,12 @@ jobs:
             arch: aarch64
             toolchain: gcc
             libc: gnu
+            dest_path: avaje-webview-linux-aarch64-gnu/src/main/resources/io/avaje/webview/nativelib/linux/aarch64/gnu/
           - target: linux-arm-gnu
             arch: armv7l
             toolchain: gcc
             libc: gnu
+            dest_path: avaje-webview-linux-arm-gnu/src/main/resources/io/avaje/webview/nativelib/linux/arm/gnu/
     
     steps:
     - uses: actions/checkout@v4
@@ -282,14 +296,16 @@ jobs:
         
         cmake --build . --config Release
     
+    - name: Copy artifacts to resource directory
+      run: |
+        mkdir -p ${{ matrix.dest_path }}
+        find webview/build-${{ matrix.target }} -type f \( -name "*.so" -o -name "*.a" \) -exec cp {} ${{ matrix.dest_path }} \;
+    
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: webview-${{ matrix.target }}
-        path: |
-          webview/build-${{ matrix.target }}/**/*.so
-          webview/build-${{ matrix.target }}/**/*.a
-          webview/build-${{ matrix.target }}/**/webview
+        path: ${{ matrix.dest_path }}*
         if-no-files-found: warn
 
   build-macos:
@@ -299,8 +315,10 @@ jobs:
         include:
           - target: mac-x86_64
             arch: x86_64
+            dest_path: avaje-webview-mac-x86_64/src/main/resources/io/avaje/webview/nativelib/macos/x86_64/
           - target: mac-aarch64
             arch: arm64
+            dest_path: avaje-webview-mac-aarch64/src/main/resources/io/avaje/webview/nativelib/macos/aarch64/
     
     steps:
     - uses: actions/checkout@v4
@@ -329,14 +347,16 @@ jobs:
                  -DWEBVIEW_ENABLE_CLANG_TIDY=OFF
         cmake --build . --config Release -- -j$(sysctl -n hw.ncpu)
     
+    - name: Copy artifacts to resource directory
+      run: |
+        mkdir -p ${{ matrix.dest_path }}
+        find webview/build-${{ matrix.target }} -type f -name "webview.dylib" -exec cp {} ${{ matrix.dest_path }} \;
+    
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: webview-${{ matrix.target }}
-        path: |
-          webview/build-${{ matrix.target }}/**/*.dylib
-          webview/build-${{ matrix.target }}/**/*.a
-          webview/build-${{ matrix.target }}/**/webview
+        path: ${{ matrix.dest_path }}webview.dylib
         if-no-files-found: warn
 
   build-windows:
@@ -347,9 +367,11 @@ jobs:
           - target: windows-x86
             arch: Win32
             platform: x86
+            dest_path: avaje-webview-windows-x86/src/main/resources/io/avaje/webview/nativelib/windows_nt/x86/
           - target: windows-x86_64
             arch: x64
             platform: x64
+            dest_path: avaje-webview-windows-x86_64/src/main/resources/io/avaje/webview/nativelib/windows_nt/x86_64/
     
     steps:
     - uses: actions/checkout@v4
@@ -371,39 +393,109 @@ jobs:
         cmake .. -A ${{ matrix.arch }} -DCMAKE_BUILD_TYPE=Release -DWEBVIEW_BUILD_DOCS=OFF -DWEBVIEW_ENABLE_CLANG_FORMAT=OFF
         cmake --build . --config Release
     
-    - name: List build outputs
+    - name: Copy artifacts to resource directory
+      shell: bash
       run: |
-        echo "Build directory contents:"
-        cd  webview\build-${{ matrix.target }}  && ls && cd ../..
+        mkdir -p ${{ matrix.dest_path }}
+        find webview/build-${{ matrix.target }} -type f -name "webview.dll" -exec cp {} ${{ matrix.dest_path }} \;
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: webview-${{ matrix.target }}
-        path: |
-          webview/build-${{ matrix.target }}/**/*.dll
-          webview/build-${{ matrix.target }}/**/*.lib
-          webview/build-${{ matrix.target }}/**/*.exe
+        path: ${{ matrix.dest_path }}webview.dll
         if-no-files-found: warn
 
-  create-release:
+  create-pr:
     needs: [build-linux, build-linux-musl, build-linux-arm-musl, build-linux-arm, build-macos, build-windows]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      pull-requests: write
     
     steps:
+    - uses: actions/checkout@v4
+    
     - name: Download all artifacts
       uses: actions/download-artifact@v4
       with:
         path: artifacts
     
-    - name: Display structure
-      run: ls -R artifacts
+    - name: Copy artifacts to correct locations
+      run: |
+        # Process each artifact directory
+        for artifact_dir in artifacts/webview-*; do
+          if [ -d "$artifact_dir" ]; then
+            target_name=$(basename "$artifact_dir" | sed 's/webview-//')
+            echo "Processing $target_name"
+            
+            # Map target to destination path
+            case "$target_name" in
+              "linux-x86-gnu")
+                dest="avaje-webview-linux-x86-gnu/src/main/resources/io/avaje/webview/nativelib/linux/x86/gnu/"
+                ;;
+              "linux-x86_64-gnu")
+                dest="avaje-webview-linux-x86_64-gnu/src/main/resources/io/avaje/webview/nativelib/linux/x86_64/gnu/"
+                ;;
+              "linux-x86-musl")
+                dest="avaje-webview-linux-x86-musl/src/main/resources/io/avaje/webview/nativelib/linux/x86/musl/"
+                ;;
+              "linux-x86_64-musl")
+                dest="avaje-webview-linux-x86_64-musl/src/main/resources/io/avaje/webview/nativelib/linux/x86_64/musl/"
+                ;;
+              "linux-aarch64-musl")
+                dest="avaje-webview-linux-aarch64-musl/src/main/resources/io/avaje/webview/nativelib/linux/aarch64/musl/"
+                ;;
+              "linux-arm-musl")
+                dest="avaje-webview-linux-arm-musl/src/main/resources/io/avaje/webview/nativelib/linux/arm/musl/"
+                ;;
+              "linux-aarch64-gnu")
+                dest="avaje-webview-linux-aarch64-gnu/src/main/resources/io/avaje/webview/nativelib/linux/aarch64/gnu/"
+                ;;
+              "linux-arm-gnu")
+                dest="avaje-webview-linux-arm-gnu/src/main/resources/io/avaje/webview/nativelib/linux/arm/gnu/"
+                ;;
+              "mac-x86_64")
+                dest="avaje-webview-mac-x86_64/src/main/resources/io/avaje/webview/nativelib/macos/x86_64/"
+                ;;
+              "mac-aarch64")
+                dest="avaje-webview-mac-aarch64/src/main/resources/io/avaje/webview/nativelib/macos/aarch64/"
+                ;;
+              "windows-x86")
+                dest="avaje-webview-windows-x86/src/main/resources/io/avaje/webview/nativelib/windows_nt/x86/"
+                ;;
+              "windows-x86_64")
+                dest="avaje-webview-windows-x86_64/src/main/resources/io/avaje/webview/nativelib/windows_nt/x86_64/"
+                ;;
+              *)
+                echo "Unknown target: $target_name"
+                continue
+                ;;
+            esac
+            
+            # Copy files to destination
+            mkdir -p "$dest"
+            cp -v "$artifact_dir"/* "$dest/" 2>/dev/null || echo "No files to copy for $target_name"
+          fi
+        done
     
-    - name: Create Release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v6
       with:
-        files: artifacts/**/*
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: "Update webview native libraries"
+        title: "Update webview native libraries"
+        body: |
+          This PR updates the webview native libraries for all platforms.
+          
+          Built libraries for:
+          - Linux (x86, x86_64, ARM, AArch64) with GNU and musl libc
+          - macOS (x86_64, AArch64)
+          - Windows (x86, x86_64)
+          
+          Auto-generated by the Build Webview Binaries workflow.
+        branch: update-webview-binaries
+        delete-branch: true
+        labels: |
+          automated
+          native-libraries
